@@ -1,4 +1,5 @@
-<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN203bno5dTVwZGZ5N3F6NnNoOThmZ3hkamZqMjJqOG52b2pnY3U5NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Qu1fT51CG14ksIkASL/giphy.gif" width="50" alt="AI thinking gif" />
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExN203bno5dTVwZGZ5N3F6NnNoOThmZ3hkamZqMjJqOG52b2pnY3U5NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Qu1fT51CG14ksIkASL/giphy.gif" width="100" alt="AI thinking gif" />
+
 # Wisconsin Prison COVID-19 Mortality Study 🏛️🦠
 
 
