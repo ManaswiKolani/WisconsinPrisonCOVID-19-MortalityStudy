@@ -1,0 +1,267 @@
+---
+title: "Final Report"
+author: "Claire Carlson, Sydney Scalzo, Ary Baal, Manaswi Kolani"
+output:
+  html_document:
+    df_print: paged
+editor_options:
+  chunk_output_type: inline
+---
+```{r setup, include=FALSE}
+library(tidyverse)
+source("../scripts/viridis.R")
+source("../scripts/ggprob.R")
+
+facilities = read_csv("../data/facilities.csv")
+```
+
+**Introduction**
+
+The COVID-19 pandemic has had a profound impact on many communities across the U.S. where some were disproportionately affected more than others. In this paper, we look into the impacts that COVID-19 had on the U.S. inmate populations and focus on the proportion of COVID-19 inmate deaths. More specifically, we focus on the proportion of COVID-19 inmate deaths in the state of Wisconsin and compare it to that of the average proportion COVID-19 inmate deaths across the U.S.
+
+The goal of this report is to determine whether the state of Wisconsin’s inmate population was disproportionately affected by COVID-19 relative to the U.S. inmate populations as a whole. By running a formal analysis of the difference in proportions between the proportion of Wisconsin’s COVID-19 inmate deaths and the average proportion of COVID-19 inmate deaths across the U.S., this report attempts to explore the possibility of COVID-19 having a disproportionate impact on Wisconsin inmate population.
+
+Through this analysis, we attempt to draw a conclusion about the impact that COVID-19 might have had on prisoners in Wisconsin in relation to the U.S. inmate population as a whole. Is the proportion of inmate deaths due COVID-19 in the state of Wisconsin the same as the average across the U.S.? The answer is no, as shown by the difference in proportions hypothesis test, there is a statistically significant difference in the proportion of inmates from Wisconsin that died from COVID compared to the proportion of inmates in the US who died from COVID.
+
+
+**Background**
+
+The data were collected by the New York Times in “facilities.csv” from many places, including websites overseen by state and federal prison systems and Immigration and Customs Enforcement, direct inquiries, public records requests, news conferences, meetings of county or state officials, coroner’s reports, medical records, and reports from investigative agencies.^[https://github.com/nytimes/covid-19-data/tree/master/prisons]
+
+The key variables of the dataset are facility_state, which records the state each facility is located in, max_inmate_population_2020, which is the maximum facility population recorded between March 2020 and March 2021, and total_inmate_deaths, which is the number of inmates reported to have died of COVID-19 from the beginning of the pandemic through March 2021.
+
+The background for this question is that in March 2020, the world was first put in lockdown for the novel Coronavirus-19 pandemic.^[https://en.wikipedia.org/wiki/COVID-19_pandemic] People were expected to stay six feet away from each other during this time to reduce the spread of the virus. Prisons were impacted by COVID negatively because of the close quarters which most inmates live in, and the overcrowding of some facilities. The data will help us examine how the pandemic affected each state in terms of how many inmates died from the coronavirus.
+
+Unusual factors which may affect the interpretations of the results are different states releasing certain populations of prisoners in order to reduce their inmate population. Once the country knew that this virus was spreading through the air, certain states were pushing and trying to get as many people out of prison as possible, who were not a threat to society, for the safety and health of the prison population. Another unusal factor that may affect our interpretation is the fact that some of the data seems to be low/missing. West Virginia, Alaska, Idaho, Maine, Nebraska, Puerto Rico, and Vermont have 0 reported deaths from their prison population, which could be due to low/no testing going on, or refusal to share COVID data with reporters. Whatever the case, we will keep these factors in mind when interpreting our results.
+
+For the rest of this report, we will analyze whether Wisconsin, our state of interest, has a different proportion of inmates that died from COVID-19 than the rest of the US inmate population proportion of COVID deaths. We will do this by performing a difference in proportions hypothesis test, and approximating with a normal distribution. We are testing the hypothesis that the proportion of deaths from COVID in prisons between Wisconsin and the US are not different. Based on the significance value, we will draw conclusions about what could lead to this outcome in our discussion.
+
+
+**Graphs**
+
+```{r, echo = FALSE}
+facilities = facilities %>% drop_na(total_inmate_deaths, facility_state, max_inmate_population_2020)
+all_states = facilities %>% select(facility_state, total_inmate_deaths) 
+
+wi = facilities %>% filter(facility_state == 'Wisconsin') %>% select(facility_state, total_inmate_deaths) 
+
+all_states_sum = all_states %>% summarize(mu = mean(total_inmate_deaths), sigma = sd(total_inmate_deaths))
+
+wi_sum = wi %>% summarize(mu = mean(total_inmate_deaths), sigma = sd(total_inmate_deaths))
+```
+
+
+```{r, echo = FALSE}
+
+ggplot(data.frame(x = c(-15, 15)), aes(x = x)) +
+        stat_function(fun = dnorm, args = list(all_states_sum$mu, all_states_sum$sigma),
+                      aes(colour = "All States")) +
+        stat_function(fun = dnorm, args = list(wi_sum$mu, wi_sum$sigma),
+                      aes(colour = "Wisconsin")) +
+        ggtitle("Normal Distributions of COVID-19 Inmate Deaths") +
+  xlab("Average Number of Inmate Deaths") +
+  ylab("Probability Density") +
+        scale_colour_manual("Groups", values = c("black", "red")) 
+```
+
+
+> The graph above depicts the normal distribution of the average number of COVID-19 deaths of inmates in just Wisconsin as well as in all states across the US. The peak of each normal distribution curve corresponds to the average number of inmate deaths for that distribution. The graph shows the peak for the Wisconsin distribution (in red) is shifted left relative to the peak of the distribution for all states (in black), suggesting the average number of inmate deaths in Wisconsin is different from the average inmate deaths for the whole country.
+
+
+ 
+
+```{r, echo = FALSE}
+scatter_data = facilities %>% 
+  group_by(facility_state) %>% 
+  summarize(inmate_deaths = sum(total_inmate_deaths), inmate_pop = sum(max_inmate_population_2020), pct_deaths = (inmate_deaths / inmate_pop) * 100) %>% 
+  mutate(iswisco = case_when(facility_state == 'Wisconsin' ~ "Wisconsin", T ~ "Other States"))
+
+
+
+ggplot(scatter_data, aes(x = inmate_pop, y = pct_deaths)) + 
+  geom_point(aes(color = iswisco)) + 
+  guides(color = guide_legend(title = "Wisconsin Identifier")) +
+  xlab("State Inmate Population") + 
+  ylab("Percent of Population that Died from COVID-19") +
+  ggtitle("Percent of Inmate Population Killed by COVID-19 By State") +
+  scale_colour_manual(values = c("black", "red"))
+```
+
+> The above scatter plot shows the relationship between the total inmate population of a state and the percentage of that population that died from COVID-19. Each point represents a unique state, with Wisconsin shown in a different color. It is important to keep in mind the varying sizes of populations in different states when comparing the rate of inmate COVID-19 deaths. For instance, a state with an extremely high population and a low death rate should be distinguished from another state with the same low death rate but a much smaller population.
+
+
+**Analysis**
+
+For our analysis we will use a difference in proportions hypothesis test to prove our thesis.
+
+#### Statistical Model
+
+The statistical model is:
+
+- $X_1$ is our testing sample of inmates that will die from COVID in the US
+- $X_2$ is our testing sample of inmates that will die from COVID in the state of Wisconsin
+- $p_1$ is the probability that an inmate dies from COVID in the US
+- $p_2$ is the probability that an inmate in WI dies from COVID
+
+
+$$
+X_1 \mid p_1 \sim \text{Binomial}(1063866,p_1) \\
+X_2 \mid p_2 \sim \text{Binomial}(21645,p_2)
+$$
+
+#### Hypothesis
+
+- Our hypothesis is that the probability of an inmate dying from COVID in Wisconsin's inmate population is no different than the probability of an inmate dying from COVID in the whole US inmate population.
+
+$$
+H_0: p1 - p2 = 0 \\
+H_a: p1 - p2 \neq 0
+$$
+
+- If the null hypothesis is true, then p1=p2, the distribution of the test statistic is whatever it is when X1 and X2 are drawn from binomial distributions with the same success probability p
+
+```{r, include=FALSE}
+facility_state = facilities %>%
+  drop_na(max_inmate_population_2020, total_inmate_deaths) %>% 
+  group_by(facility_state) %>%
+  summarize(inmate_deaths = sum(total_inmate_deaths),
+            inmate_pop = sum(max_inmate_population_2020),
+            prop_death = inmate_deaths / inmate_pop)
+
+facility_state 
+```
+
+```{r, include=FALSE}
+#summary table with US totals and proportion of deaths from COVID
+us_tbl = facility_state %>% 
+  summarize(
+    pop = sum(inmate_pop),
+    death = sum(inmate_deaths),
+    p_us_dead = death / pop
+  )
+
+us_tbl  
+```
+
+
+```{r, include=FALSE}
+#summary table with wisconsin totals and proportion of deaths from COVID 
+wi_tbl = facility_state %>% 
+  filter(facility_state == "Wisconsin") %>% 
+  summarize(sample_pop = sum(inmate_pop),
+            death = sum(inmate_deaths),
+            p_wi_dead = death / sample_pop
+            )
+wi_tbl
+```
+
+**Test Statistic**
+
+- For this test statistic, we are calculating a p-hat value using our proportion estimates (p1 and p2) from the data in a simulation. 
+- We are simulating many independent samples of the same sample size, then calculating the difference in these sample proportions.
+- By simulating these proportions we can use this as the long term average estimate and draw conclusions about our hypothesis
+
+```{r, include=FALSE}
+n1 = 21645
+n2 = 1063866 
+
+data_sum = tibble(
+  location = c("WI", "US"),
+  n = c(n1, n2),
+  death = c(26, 1915),
+  p_hat = death / n
+)
+
+data_sum
+```
+
+- Our test statistic is
+```{r, echo=FALSE}
+B = 1000000
+test_stat = data_sum %>% 
+  select(p_hat) %>% 
+  summarize(stat = diff(p_hat)) %>% 
+  pull(stat)
+  
+test_stat
+```
+
+
+```{r, include=FALSE}
+p0 = data_sum %>% 
+  summarize(deaths = sum(death),
+            n = sum(n),
+            p = deaths / n) %>% 
+  pull(p)
+
+p0
+```
+
+```{r,include=FALSE}
+set.seed(20010731)
+n1 = 21645
+n2 = 1063866
+
+sim = tibble(
+  x1 = rbinom(B, n1, p0), 
+  n1 = n1,
+  x2 = rbinom(B, n2, p0), 
+  n2 = n2,
+  phat1 = x1/n1,
+  phat2 = x2/n2,
+  diff = phat1 - phat2)
+```
+
+```{r, include=FALSE}
+se_sim = sim %>% 
+  summarize(se = sd(diff)) %>% 
+  pull(se)
+```
+
+
+
+**Sampling Distribution**
+
+```{r, echo=FALSE}
+ggplot(sim, aes(x=diff)) +
+  geom_density(fill = "papayawhip") +
+  geom_vline(xintercept = test_stat, color = "red", linetype = "dashed") +
+  geom_hline(yintercept = 0) +
+  xlab("Difference in Sample Proportions") +
+  ggtitle("Simulation Density Plot of Difference in Proportions") +
+  theme_minimal() 
+```
+**Outcomes**
+
+ - We see that the simulation sampling distribution is well-approximated by a normal curve
+ - the test statistic is far in the tail, so we expect a small p-value
+
+**P-Value**
+
+```{r, include = FALSE}
+pvalue_sim = sim %>% 
+  summarize(
+    pvalue = mean( abs(diff) > test_stat | near(abs(diff), test_stat)) ) %>% 
+  pull(pvalue)
+```
+
+
+- Our p-value is
+```{r, echo = FALSE}
+pvalue_sim
+```
+ - We are testing the null hypothesis against a significance values of 0.05.
+ - The p value is 0.03 which indicates strong evidence against the null hypothesis, and we can reject that there are equal proportions of death from COVID among Wisconsin inmates compared to all US inmates.
+ 
+ 
+ 
+**Interpretations**
+
+
+With respect to our question of interest, we can draw a conclusion based on the results of our analysis that the two proportions are likely not equal. This conclusion is also supported by a scatter plot of our data which shows that Wisconsin's proportion of COVID inmate deaths is lower than that of other states with similar populations.
+That said, we are aware of the limitations of our analysis. A two-sided test doesn’t tell us much in regard to the direction of impact–we do know that the proportion of inmate deaths for the state of WI is statistically significant, but we don’t know whether that is a desirable outcome. Did the state of Wisconsin do better than the rest of the U.S. in terms of lowering COVID inmate deaths…or did it fail to do that and instead had a higher COVID inmate death rate? Although we attempt to answer this question with graphical representation, we believe that conducting a one-sided test of significance in this case is more appropriate.
+ 
+Also, due to the fact that data collection has stalled in many places, there could be significant differences in COVID deaths that would better represent the long term average in proportion of COVID inmate deaths that are not represented in our data.
+ 
+Our main conclusion is that the state of Wisconsin does have a statistically significant different proportion of COVID inmate deaths, compared to the US inmate population as a whole. This conclusion is drawn based on our p-value that presents strong evidence that this is the case. By graphically exploring the data, it looks like Wisconsin’s long run average proportion of COVID inmate deaths is lower, but we cannot make that conclusion definitively. We speculate that part of the reason why the state of Wisconsin may have had lower proportion of COVID inmate deaths was due to the fact that Wisconsin’s DOC implemented rigorous COVID policies to fight the spread as soon as the pandemic started. ^[https://doc.wi.gov/Pages/COVID19(Coronavirus)/ResponseEfforts.aspx]
+
