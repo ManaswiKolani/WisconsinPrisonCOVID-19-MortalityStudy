@@ -3,8 +3,9 @@
 # 🏛️🦠 Wisconsin Prison COVID-19 Mortality Study 
 
 ## Overview 🔍  
-This project asks **“Did Wisconsin prisons experience a different COVID-19 mortality rate than U.S. prisons overall?”** Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:
+This project asks **“Did Wisconsin prisons experience a different COVID-19 mortality rate than U.S. prisons overall?”**  
 
+Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:  
 1. 📊 Aggregate inmate populations and deaths to the state level  
 2. 🧮 Estimate mortality proportions for Wisconsin and the entire U.S.  
 3. ⚖️ Run a two-sample difference-in-proportions test via 10 000-iteration Monte Carlo simulation  
