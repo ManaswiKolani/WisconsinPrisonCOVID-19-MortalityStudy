@@ -40,6 +40,6 @@ While these findings are compelling, they rest on data collected only through Ma
 
 ---
 
-This project was developed as a part of STAT 240 - Final Course Project.
+This project was developed as a part of STAT 240 - Final Course Project.  
 Authors: Claire Carlson, Manaswi Kolani, Sydney Scalzo, Ary Baal
 📅 May 2023
