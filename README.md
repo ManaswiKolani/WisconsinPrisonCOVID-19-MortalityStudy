@@ -2,11 +2,6 @@
 
 # 🏛️🦠 Wisconsin Prison COVID-19 Mortality Study 
 
-
-A concise analysis and codebase showing that the share of COVID-19 deaths among Wisconsin inmates differs significantly from the national prison population.
-
----
-
 ## Overview 🔍  
 This project asks **“Did Wisconsin prisons experience a different COVID-19 mortality rate than U.S. prisons overall?”** Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:
 
