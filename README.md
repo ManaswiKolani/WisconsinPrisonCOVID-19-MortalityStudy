@@ -18,7 +18,7 @@ Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:
 | `max_inmate_population_2020` | Peak population between Mar 2020 – Mar 2021 |
 | `total_inmate_deaths` | Cumulative confirmed COVID-19 inmate deaths |
 
-*Dataset:* **`facilities.csv`** compiled by *The New York Times*.
+*Dataset:* **`facilities-1.csv`** compiled by *The New York Times*.
 
 ## Key Numbers 📊  
 | Metric | Wisconsin | United States |
