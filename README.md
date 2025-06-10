@@ -6,10 +6,10 @@
 This project asks **“Did Wisconsin prisons experience a different COVID-19 mortality rate than U.S. prisons overall?”**  
 
 Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:  
-1. 📊 Aggregated inmate populations and deaths to the state level  
-2. 🧮 Estimated mortality proportions for Wisconsin and the entire U.S.  
-3. ⚖️ Conducted a two-sample difference-in-proportions test via 10 000-iteration Monte Carlo simulation  
-4. 🖼️ Visualized results with normal-curve and scatter-plot graphs 
+1. Aggregated inmate populations and deaths to the state level  
+2. Estimated mortality proportions for Wisconsin and the entire U.S.  
+3. Conducted a two-sample difference-in-proportions test via 10 000-iteration Monte Carlo simulation  
+4. Visualized results with normal-curve and scatter-plot graphs 
 
 ## Data 💾  
 | Field | Description |
