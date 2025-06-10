@@ -6,10 +6,10 @@
 This project asks **“Did Wisconsin prisons experience a different COVID-19 mortality rate than U.S. prisons overall?”**  
 
 Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:  
-1. 📊 Aggregate inmate populations and deaths to the state level  
-2. 🧮 Estimate mortality proportions for Wisconsin and the entire U.S.  
-3. ⚖️ Run a two-sample difference-in-proportions test via 10 000-iteration Monte Carlo simulation  
-4. 🖼️ Visualize results with normal-curve and scatter-plot graphics  
+1. 📊 Aggregated inmate populations and deaths to the state level  
+2. 🧮 Estimated mortality proportions for Wisconsin and the entire U.S.  
+3. ⚖️ Conducted a two-sample difference-in-proportions test via 10 000-iteration Monte Carlo simulation  
+4. 🖼️ Visualized results with normal-curve and scatter-plot graphs 
 
 ## Data 💾  
 | Field | Description |
@@ -29,11 +29,3 @@ Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:
 
 *Test statistic:* 0.0006  
 *p-value:* **0.038** (α = 0.05) → reject H₀; proportions differ.
-
-## Reproduce the Analysis 🛠️  
-```r
-# 1. Install packages
-install.packages(c("tidyverse", "ggplot2"))
-
-# 2. Run the pipeline
-source("analysis.R")  # outputs tables & figures to /outputs
