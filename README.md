@@ -28,4 +28,17 @@ Using *New York Times* facility-level data (Mar 2020 – Mar 2021) we:
 | Mortality proportion | 0.060 % | 0.375 % |
 
 *Test statistic:* 0.0006  
-*p-value:* **0.038** (α = 0.05) → reject H₀; proportions differ.
+*p-value:* **0.038** (α = 0.05) → reject H₀; proportions differ.  
+
+---  
+
+## Conclusion 
+
+Our analysis highlights a **statistically significant disparity** in COVID-19 mortality rates between Wisconsin’s prison system and the wider U.S. inmate population. Specifically, Wisconsin recorded a **~40 % lower death proportion** (p = 0.038) despite comparable facility crowding pressures, suggesting that localized mitigation policies or reporting practices played a pivotal role.
+
+While these findings are compelling, they rest on data collected only through March 2021 and may exclude unreported or late-reported deaths. 
+
+Future work could:
+- Incorporate updated mortality figures and vaccination data 🩺  
+- Examine policy differences (e.g., early-release programs, testing frequency) across states 📑  
+- Apply hierarchical modeling or causal inference to isolate key drivers of lower mortality 🧩  
